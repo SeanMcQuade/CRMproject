@@ -4,11 +4,8 @@ BarCode sim for Dr. Jongmin Nam
 Sean McQuade and Jongmin Nam 1.08.2015 to 5.26.2015
 using Sea Urchin Lineage from "Development of Sea Urchins, Ascidians, and
 other invertebrate Deuterostomes: Experimental Approaches"
-
 Authors: Charles A. Ettensohn, Gary M. Wessel, Gregory A. Wray
-
 Elsevier academic press
-
  
 % i=cellgroup integraged; 
 % j=cell in group; 
@@ -308,20 +305,7 @@ avg_exp_raw = sum(CRM_raw(:,1))/sum(CRM_raw(:,2)); %from (eq2)
 
 
 
-%{
-B_plot = sortrows(A_plot,3); %orders array with respect to(WRT) col 3
-D_plot = flip(B_plot,1) ;    %puts into descending order WRT col 3
-D_plot(end,:) = [];     %removes the last row from array, initial zeros for A.
-CRM_plot = D_plot;
-F = round(size(CRM_plot, 1)*(percent_trim));
-L = size(CRM_plot, 1) - F;
-Trimmed_info = CRM_plot(F:L,:);
-avg_exp = sum(Trimmed_info(:,1))/sum(Trimmed_info(:,2)); %from (eq2)
-%}
-%old plot data for matching experiment
-
-
-    
+  
 %write information to file
 fileID = fopen(path,'a');
 fprintf(fileID,'%s%s\t%s\t%i\t%s\t%i\t%s\t%f\n','#Target_',mat2str(Total_Targets{a}),'cDNAall'...
@@ -367,12 +351,6 @@ for i = 1:size(CRM_raw,1)
     end
 end
 
-
-
-
-%save figures
-% saveas(1,title1)
-% saveas(2,title2)
 end
 linestyle = ['-'];
 for a = 1:size(Total_Targets,2)
@@ -461,79 +439,7 @@ title(title6)
 axis auto
 end
 hold on
-%figure 7
-% if ~isempty(fourtytwo_cell_data{a})
-% figure(7)
-% simple_vector = (1:size(fourtytwo_cell_data{a},1));
-% title6 = sprintf('normalized 42 cell expression profiles');
-% plot(simple_vector, fourtytwo_cell_data{a}(:,3)/avg_exp_raw,'Color',[.7 .7 .7],...
-%     'LineWidth',3,'LineStyle',linestyle(a))
-% xlabel('number of trials');
-% ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)/Average Expression'});
-% legend('A')
-% title(title6)
-% axis auto
-% end
 
-% hold on
-% %figure 8
-% if ~isempty(sixtyfour_cell_data{a})
-% figure(8)
-% simple_vector = (1:size(sixtyfour_cell_data{a},1));
-% title8 = sprintf('normalized 64 cell expression profiles');
-% plot(simple_vector, sixtyfour_cell_data{a}(:,3)/avg_exp_raw)
-% xlabel('number of trials');
-% ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)/Average Expression'});
-% legend('C', 'A')
-% title(title8)
-% axis auto
-% end
-% hold on
-% %figure 9
-% if ~isempty(one_hundred_six_cell_data{a})
-% figure(9)
-% simple_vector = (1:size(one_hundred_six_cell_data{a},1));
-% title9 = sprintf('normalized 106 cell expression profiles');
-% plot(simple_vector, one_hundred_six_cell_data{a}(:,3)/avg_exp_raw)
-% xlabel('number of trials');
-% ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)/Average Expression'});
-% legend('C', 'A')
-% title(title9)
-% axis auto
-% end
-% hold on
-% %figure 10
-% if ~isempty(two_twelve_cell_data{a})
-% figure(10)
-% simple_vector = (1:size(two_twelve_cell_data{a},1));
-% title10 = sprintf('normalized 212 cell expression profiles');
-% plot(simple_vector, two_twelve_cell_data{a}(:,3)/avg_exp_raw)
-% xlabel('number of trials');
-% ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)/Average Expression'});
-% legend('C', 'A')
-% title(title10)
-% axis auto
 end
 
-% saveas(1,title1)
-% saveas(2,title2)
-% saveas(3,title3)
-% saveas(4,title4)
-
-% CRM_comparison = zeros(4,Number_of_Trials);
-% 
-%     
-% CRM_comparison(1,1) = rop_metric(one_cell_data{1}/avg_exp_raw,...
-%   one_cell_data{2}/avg_exp_raw);
-% 
-% CRM_comparison(2,1) = rop_metric(two_cell_data{1}/avg_exp_raw,...
-%   two_cell_data{2}/avg_exp_raw);
-%    
-% CRM_comparison(3,1) = rop_metric(four_cell_data{1}/avg_exp_raw,...
-%   four_cell_data{2}/avg_exp_raw);
-% 
-% CRM_comparison(4,1) = rop_metric(eight_cell_data{1}/avg_exp_raw,...
-%   eight_cell_data{2}/avg_exp_raw);
-%    
-% CRM_comparison
 toc
