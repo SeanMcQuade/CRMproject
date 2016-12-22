@@ -7,7 +7,7 @@ other invertebrate Deuterostomes: Experimental Approaches"
 Authors: Charles A. Ettensohn, Gary M. Wessel, Gregory A. Wray
 Elsevier academic press
  
-% i=cellgroup integraged; 
+% i=cellgroup integrated; 
 % j=cell in group; 
 % int = number of integrated cells
 % exp = number of expressed cells
