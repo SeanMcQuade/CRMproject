@@ -1,2 +1,2 @@
 # CRMproject
-program to simulate crm experiment.  This is my first branch
+program to simulate crm experiment.  This code is for a paper that has been submitted, but not published.
