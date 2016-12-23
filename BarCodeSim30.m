@@ -1,56 +1,56 @@
-tic
 %{
 BarCode sim for Dr. Jongmin Nam
 Sean McQuade and Jongmin Nam 1.08.2015 to 5.26.2015
 using Sea Urchin Lineage from "Development of Sea Urchins, Ascidians, and
 other invertebrate Deuterostomes: Experimental Approaches"
+
 Authors: Charles A. Ettensohn, Gary M. Wessel, Gregory A. Wray
+
 Elsevier academic press
+
  
-% i=cellgroup integrated; 
+% i=cellgroup integraged; 
 % j=cell in group; 
 % int = number of integrated cells
 % exp = number of expressed cells
 %}
 
 %All oblique cell cleavages are coded as horizontal cleavages!
-
-%Total_Targets is a cell array with all targets to be compared
+tic
+clear  %Total_Targets is a cell array with all targets to be compared
 %the simulation loops through this cell array
-Total_Targets{1} = [51,56];
-% Total_Targets{2} = 51;
-% Total_Targets{3} = 52;
-% Total_Targets{4} = [51,52];
+Total_Targets{1} = 50;%compare (C) with (A) with (B)
+Total_Targets{2} = 51;
+Total_Targets{3} = 52;
 
-for a = 1:size(Total_Targets,2)
+Total_Targets{4} = 51;%compare (A) with (BC)
+Total_Targets{5} = [50,52];
+
+Total_Targets{6} = [50,51];%compare (A,C) with (half A, half B, C)
+Total_Targets{7} = [50,51,52];
+%Total_Targets{5} = [51,52];
 global Number_of_Iterations
+for a = 1:size(Total_Targets,2)
 %parameters
 Number_of_Trials = 1;
-Number_of_Iterations = 1000;
+Number_of_Iterations = 10000;
 percent_trim = 0.01;
 
 %initialize
 C{64}=[];          %preallocate memory for Cell array
-Integration_Stage = zeros(Number_of_Iterations,1);
-Target1 = 51;       %cells in which integration provides transcription
-Target2 = 52;
+Integration_Stage = zeros(Number_of_Iterations,1);   
 Integrated_Cells = zeros(Number_of_Iterations,1);
 Expressed_Cells = zeros(Number_of_Iterations,1);
 Ratio_Exp_to_Int = zeros(Number_of_Iterations,1);
 A_plot = [0, 0, 0]; %place holder
 A_raw = [0, 0, 0]; %place holder
-% one_cell_data = [one_cell_data; CRM_raw(i,:)];
-% two_cell_data = [two_cell_data; CRM_raw(i,:)];
-% four_cell_data = [four_cell_data; CRM_raw(i,:)];
-% eight_cell_data = [eight_cell_data; CRM_raw(i,:)];
-% sixteen_cell_data = [sixteen_cell_data; CRM_raw(i,:)];
-% thirtytwo_cell_data = [thirtytwo_cell_data; CRM_raw(i,:)];
-% sixtyfour_cell_data = [four_cell_data; CRM_raw(i,:)];
-% one_twentyeight_cell_data = [one_twentyeight_cell_data; CRM_raw(i,:)];
-% two_fiftysix_cell_data = [two_fiftysix_cell_data; CRM_raw(i,:)];
+ROP_log{Number_of_Trials} = 0;
 
 %save file name
-path = sprintf('Sim26_target_%s.txt',mat2str(Total_Targets{a}));
+path = sprintf('Sim30_target_%s.txt',mat2str(Total_Targets{a}));
+if a == 7
+    path = 'half51, half52, and 50';
+end
 
 for b = 1:Number_of_Trials       
 for c = 1:Number_of_Iterations     
@@ -62,7 +62,7 @@ cells in the ith group.
 %}
 
 % create integration profile (this must change for oblique clev
-
+%%
 h = randi(95148);
 if h == 1 %0th stage, yields ~424 integrated cells
     i=1;
@@ -150,13 +150,44 @@ elseif h>=68322 && h<75147  %Stage VIII, yields ~2 integrated cells
         i=randi([38,40]);
     elseif p>=38 && p<=53
         i=randi([41,44]);
+        
+    %{
+    if p==1
+        i=31;
+    elseif p==2
+        i=32;
+    elseif p==3
+        i=33;
+    elseif p==4
+        i=34;
+    elseif p==5 || p==6
+        i=35;
+    elseif p==7 || p==8
+        i=36;
+    elseif p>=9 && p<=16
+        i=37;
+    elseif p>=17 && p<=24
+        i=38;
+    elseif p>=25 && p<=32
+        i=39;
+    elseif p>=33 && p<=40
+        i=40;
+    elseif p>=40 && p<=43
+        i=41;
+    elseif p>=44 && p<=47
+        i=42;
+    elseif p>=48 && p<=51
+        i=43;
+    elseif p>=52 && p<=55
+        i=44;
+  %}
     end
     m=9;
 elseif h>=75148 && h<=95148 %Stage IX, yields 1 integrated cell
     i=randi([45,64]);
     m=10;
 end
-
+%%
 %make vector for hist: Integration_Stage
 Integration_Stage(c)=m;
 
@@ -179,7 +210,10 @@ end
 
 %the DNA is integrated in the jth cell in the ith group.
 j = DNA_integrated_cell;
-    
+%%    The cells multiply with incorporated dna expressed as 1, no incorporation is 0.
+%, they multiply either by concatenating a group with itself 
+%(no bifurcation on the cell lineage) , or by setting two new groups equal
+%to the parent group (bifurcation in the cell lineage)
 Cells0 = zeros(1,1); 
 
 C{1}= Cells0;
@@ -193,10 +227,10 @@ C{4}= C{3};
 C{5}= C{3}; 
 
 C{i}(j)=1;
-C{6}= C{4};                                                              %4
-C{7}= C{4};                                                              %4  
-C{8}= C{5};                                                              %4
-C{9}= C{5};                                                              %4
+C{6}= C{4};                                                              
+C{7}= C{4};                                                                
+C{8}= C{5};                                                              
+C{9}= C{5};                                                              
 
 C{i}(j)=1; 
 C{10} = C{6};  
@@ -270,176 +304,129 @@ C{63}= cat(2,C{33},C{33});
 C{64}= cat(2,C{34},C{34});
 
 C{i}(j)=1;
-
+%%
 %Count integrated cells within specified "target" groups
-Expressed_Cells = 0; 
-for d=1:size(Total_Targets{a},2)
-Expressed_Cells = Expressed_Cells + nnz(C{Total_Targets{a}(d)});
+
+
+
+
+%for target = [C,hA, hB], we sum the groups
+if a == 7
+    Targetgroup1 = C{Total_Targets{a}(1)};       %These variables are used to calculate half in 51 and half in 52
+    Targetgroup2 = C{Total_Targets{a}(2)};
+    Targetgroup3 = C{Total_Targets{a}(3)};
+    halfTargetgroup2 = C{Total_Targets{a}(2)}(17:32);
+    halfTargetgroup3 = C{Total_Targets{a}(3)}(1:16);
+    Expressed_Cells(c) = nnz(Targetgroup1)+ nnz(halfTargetgroup2)+ nnz(halfTargetgroup3);
+else
+    for d=1:size(Total_Targets{a},2)
+        Expressed_Cells(c) = Expressed_Cells(c) + nnz(C{Total_Targets{a}(d)});
+    end
 end
 
-% half1 = round(size(Target1)/2);
-% half2 = round(size(Target2)/2);
-% %Expressed_Cells(c) = nnz(C{Target1})+ nnz(C{Target2});
-% Expressed_Cells(c) = nnz(C{Target1}(half1:end)) + nnz(C{Target2}(1:half2));
-
 %Counts integrated cells in all stage 9 groups(also C{45} and C{46} (SM))
-Integrated_Cells  = nnz(C{47}) + nnz(C{48}) + nnz(C{49}) + ...
+Integrated_Cells(c)  = nnz(C{47}) + nnz(C{48}) + nnz(C{49}) + ...
     nnz(C{50}) + nnz(C{51}) + nnz(C{52}) + nnz(C{53}) + nnz(C{54}) +...
     nnz(C{55}) + nnz(C{56}) + nnz(C{57}) + nnz(C{58}) + nnz(C{59}) +...
     nnz(C{60}) + nnz(C{61}) + nnz(C{62}) + nnz(C{63}) + nnz(C{64}) +...
     nnz(C{45}) + nnz(C{46}); %these last two terms add SM1 and SM2
 %log the ratio of this particular iteration in the experiment
-Ratio_Exp_to_Int = Expressed_Cells/Integrated_Cells;
-A_raw = [A_raw; Expressed_Cells, Integrated_Cells, Ratio_Exp_to_Int];
-if Integrated_Cells >= 4
-    A_plot = [A_plot; Expressed_Cells, Integrated_Cells, Ratio_Exp_to_Int];
+Ratio_Exp_to_Int(c) = Expressed_Cells(c)/Integrated_Cells(c);
+A_raw = [A_raw; Expressed_Cells(c), Integrated_Cells(c), Ratio_Exp_to_Int(c)];
+%%%%%%%%%%%% if Integrated_Cells(c) >= 4%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% A_plot = [A_plot; Expressed_Cells(c), Integrated_Cells(c), Ratio_Exp_to_Int(c)];
+%%%%%%%%%%%% end
+A_plot = [A_plot; Expressed_Cells(c), Integrated_Cells(c), Ratio_Exp_to_Int(c)];
+
 end
-%1celldata, 2celldata, 4celldata, etc.
-end
+%%
 %Data is ordered by column 3 (expression ratio), then put into descending
 B_raw = sortrows(A_raw,3); %orders array with respect to(WRT) col 3
 D_raw = flip(B_raw,1) ;    %puts into descending order WRT col 3
 D_raw(end,:) = [];     %removes the last row from array, initial zeros for A.
 CRM_raw = D_raw;
-avg_exp_raw = sum(CRM_raw(:,1))/sum(CRM_raw(:,2)); %from (eq2)
+%from (eq2)
+avg_exp = sum(CRM_raw(:,3))/Number_of_Iterations;
 
+B_plot = sortrows(A_plot,3); %orders array with respect to(WRT) col 3
+D_plot = flip(B_plot,1) ;    %puts into descending order WRT col 3
+D_plot(end,:) = [];     %removes the last row from array, initial zeros for A.
+CRM_plot = D_plot;
+simple_vector = (1:Number_of_Iterations);
 
-
+% title1 = sprintf('expression profile, Target=%s',mat2str(Total_Targets{a}));
+% figure;
+% plot(simple_vector, Trimmed_info(:,3))
+% xlabel('raw number of trials');
+% ylabel({'Rank-Ordered, raw expression','(cDNA/gDNA)'});
+% title(title1)
+% axis([0, size(Trimmed_info, 1), 0, 1]) 
   
+% figure;
+% plot(simple_vector, CRM_plot(:,3)/avg_exp,'LineWidth',2)
+% xlabel('Rank','fontsize',18);
+% ylabel('Expression Level / Mean','fontsize',18);
+% figure_title = sprintf('%s',mat2str(Total_Targets{a})');
+% title(figure_title)
+% axis auto
+%%
+CRMlog{a}=CRM_plot;
+
+
+%%
 %write information to file
 fileID = fopen(path,'a');
 fprintf(fileID,'%s%s\t%s\t%i\t%s\t%i\t%s\t%f\n','#Target_',mat2str(Total_Targets{a}),'cDNAall'...
-    ,sum(CRM_raw(:,1)),'gDNAall',sum(CRM_raw(:,2)),'c/g_all', avg_exp_raw);
+    ,sum(CRM_raw(:,1)),'gDNAall',sum(CRM_raw(:,2)),'c/g_all', avg_exp);
 fclose(fileID);
-end
-
-one_cell_data{a} = [];
-two_cell_data{a} = [];
-four_cell_data{a} = [];
-eight_cell_data{a} = [];
-sixteen_cell_data{a} = [];
-thirtytwo_cell_data{a} = [];
-fourtytwo_cell_data{a} = [];
-sixtyfour_cell_data{a} = [];
-one_hundred_six_cell_data{a} = [];
-two_twelve_cell_data{a} = [];
-four_twentyfour_cell_data{a} = [];
-
-for i = 1:size(CRM_raw,1)
-    if CRM_raw(i,2) == 1
-        one_cell_data{a} = [one_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 2
-        two_cell_data{a} = [two_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 4        
-        four_cell_data{a} = [four_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 8
-        eight_cell_data{a} = [eight_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 16  
-        sixteen_cell_data{a} = [sixteen_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 32
-        thirtytwo_cell_data{a} = [thirtytwo_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 42
-        fourtytwo_cell_data{a} = [fourtytwo_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 64        
-        sixtyfour_cell_data{a} = [sixtyfour_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 106
-        one_hundred_six_cell_data{a} = [one_hundred_six_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 212        
-        two_twelve_cell_data{a} = [two_twelve_cell_data{a}; CRM_raw(i,:)];
-    elseif CRM_raw(i,2) == 424        
-        four_twentyfour_cell_data{a} = [four_twentyfour_cell_data{a}; CRM_raw(i,:)];
-    end
+%write raw data
+for h = 1:size(CRM_raw, 1)
+    fileID = fopen(path,'a');
+    fprintf(fileID,'\t%s\t%i\t%s\t%i\t%s\t%f\n','cDNA'...
+        ,CRM_raw(h,1),'gDNA',CRM_raw(h,2),'c/g',CRM_raw(h,3));
+    fclose(fileID);
 end
 
 end
-linestyle = ['-'];
-for a = 1:size(Total_Targets,2)
-hold on
-%figure 1
-if ~isempty(one_cell_data{a})
-figure(1)
-simple_vector = (1:size(one_cell_data{a},1));
-title1 = sprintf('normalized 1 cell expression profile');
-plot(simple_vector, one_cell_data{a}(:,3),'Color',[.3 0 .5],...
-    'LineWidth',3,'LineStyle',linestyle(a))
-xlabel('number of trials');
-ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)'});
-legend('A')
-title(title1)
-axis auto
-end
-hold on
-%figure 2
-if ~isempty(two_cell_data{a})
-figure(2)
-simple_vector = (1:size(two_cell_data{a},1));
-title2 = sprintf('normalized 2 cell expression profile');
-plot(simple_vector, two_cell_data{a}(:,3),'Color',[0 .8 0],...
-    'LineWidth',3,'LineStyle',linestyle(a))
-xlabel('number of trials');
-ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)'});
-legend('A')
-title(title2)
-axis auto
-end
-hold on
-%figure 3
-if ~isempty(four_cell_data{a})
-figure(3)
-simple_vector = (1:size(four_cell_data{a},1));
-title3 = sprintf('normalized 4 cell expression profile');
-plot(simple_vector, four_cell_data{a}(:,3),'Color',[1 .5 0],...
-    'LineWidth',3,'LineStyle',linestyle(a))
-xlabel('number of trials');
-ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)'});
-legend('A')
-title(title3)
-axis auto
-end
-hold on
-%figure 4
-if ~isempty(eight_cell_data{a})
-figure(4)
-simple_vector = (1:size(eight_cell_data{a},1));
-title4 = sprintf('normalized 8 cell expression profile');
-plot(simple_vector, eight_cell_data{a}(:,3),'Color',[.8 0 0],...
-    'LineWidth',3,'LineStyle',linestyle(a))
-xlabel('number of trials');
-ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)'});
-legend('A')
-title(title4)
-axis auto
-end
-hold on
-%figure 5
-if ~isempty(sixteen_cell_data{a})
-figure(5)
-simple_vector = (1:size(sixteen_cell_data{a},1));
-title5 = sprintf('normalized 16 cell expression profile');
-plot(simple_vector, sixteen_cell_data{a}(:,3),'Color',[.5 0 0],...
-    'LineWidth',3,'LineStyle',linestyle(a))
-xlabel('number of trials');
-ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)'});
-legend('A')
-title(title5)
-axis auto
-end
-hold on
-%figure 6
-if ~isempty(thirtytwo_cell_data{a})
-figure(6)
-simple_vector = (1:size(thirtytwo_cell_data{a},1));
-title6 = sprintf('normalized 32 cell expression profile');
-plot(simple_vector, thirtytwo_cell_data{a}(:,3),'Color',[0 .3 0],...
-    'LineWidth',3,'LineStyle',linestyle(a))
-xlabel('number of trials');
-ylabel({'Rank-Ordered Expression Profile','(cDNA/gDNA)'});
-legend('A')
-title(title6)
-axis auto
-end
-hold on
+
+
 
 end
+ 
+figure(1);
+plot(simple_vector, CRMlog{1}(:,3)/avg_exp,simple_vector, CRMlog{2}(:,3)/avg_exp,simple_vector, CRMlog{3}(:,3)/avg_exp,'LineWidth',2)
+xlabel('Rank','fontsize',18);
+ylabel('Expression Level / Mean','fontsize',18);
+title('Comparison of Rank Order Profiles','fontsize',18)
+legend('C', 'A', 'B')
+DistanceC_A=rop_metric(CRMlog{1},CRMlog{2});
+DistanceA_B=rop_metric(CRMlog{2},CRMlog{3});
+DistanceC_B=rop_metric(CRMlog{1},CRMlog{3});
+inset1a = sprintf('The distance between C and A is %3.3f',DistanceC_A);
+inset1b = sprintf('The distance between A and B is %3.3f',DistanceA_B);
+inset1c = sprintf('The distance between C and B is %3.3f',DistanceC_B);
+text(3000,3,inset1a)
+text(3000,2,inset1b)
+text(3000,1,inset1c)
 
+%legend('C', 'A', 'B', 'A and B', 'hA and hB')
+figure(2);
+plot(simple_vector, CRMlog{4}(:,3)/avg_exp,simple_vector, CRMlog{5}(:,3)/avg_exp,'LineWidth',2)
+xlabel('Rank','fontsize',18);
+ylabel('Average Expression Level','fontsize',18);
+title('Comparison of Rank Order Profiles','fontsize',18)
+legend('A', 'B and C')
+DistanceA_BC=rop_metric(CRMlog{4},CRMlog{5});
+inset2 = sprintf('The distance between curves is %3.3f',DistanceA_BC);
+text(3000,3,inset2)
+
+figure(3);
+plot(simple_vector, CRMlog{6}(:,3)/avg_exp,simple_vector, CRMlog{7}(:,3)/avg_exp,'LineWidth',2)
+xlabel('Rank','fontsize',18);
+ylabel('Average Expression Level','fontsize',18);
+title('Comparison of Rank Order Profiles','fontsize',18)
+legend('A and C', 'half A and half B and C')
+DistanceAC_hAhBC=rop_metric(CRMlog{6},CRMlog{7});
+inset3 = sprintf('The distance between curves is %3.3f',DistanceAC_hAhBC);
+text(3000,3,inset3)
 toc
