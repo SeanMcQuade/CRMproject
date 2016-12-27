@@ -14,22 +14,27 @@ Elsevier academic press
 % int = number of integrated cells
 % exp = number of expressed cells
 %}
-
+%%
 %All oblique cell cleavages are coded as horizontal cleavages!
 tic
 clear  %Total_Targets is a cell array with all targets to be compared
 %the simulation loops through this cell array
+
+%figure 1
 Total_Targets{1} = 50;%compare (C) with (A) with (B)
 Total_Targets{2} = 51;
 Total_Targets{3} = 52;
 
+%figure 2
 Total_Targets{4} = 51;%compare (A) with (BC)
 Total_Targets{5} = [50,52];
 
+%figure 3
 Total_Targets{6} = [50,51];%compare (A,C) with (half A, half B, C)
 Total_Targets{7} = [50,51,52];
 %Total_Targets{5} = [51,52];
 global Number_of_Iterations
+%%
 for a = 1:size(Total_Targets,2)
 %parameters
 Number_of_Trials = 1;
@@ -342,11 +347,13 @@ end
 %%
 %Data is ordered by column 3 (expression ratio), then put into descending
 B_raw = sortrows(A_raw,3); %orders array with respect to(WRT) col 3
-D_raw = flip(B_raw,1) ;    %puts into descending order WRT col 3
+D_raw = flip(B_raw,1);    %puts into descending order WRT col 3
 D_raw(end,:) = [];     %removes the last row from array, initial zeros for A.
 CRM_raw = D_raw;
 %from (eq2)
-avg_exp = sum(CRM_raw(:,3))/Number_of_Iterations;
+%avg_exp = sum(CRM_raw(:,3))/Number_of_Iterations; instinctual calculation
+avg_exp = sum(CRM_raw(:,1))/sum(CRM_raw(:,2)); %paper calculation eq. (2)
+
 
 B_plot = sortrows(A_plot,3); %orders array with respect to(WRT) col 3
 D_plot = flip(B_plot,1) ;    %puts into descending order WRT col 3
@@ -370,6 +377,7 @@ simple_vector = (1:Number_of_Iterations);
 % title(figure_title)
 % axis auto
 %%
+avg_expLOG(a)=avg_exp;
 CRMlog{a}=CRM_plot;
 
 
@@ -394,7 +402,7 @@ end
 end
  
 figure(1);
-plot(simple_vector, CRMlog{1}(:,3)/avg_exp,simple_vector, CRMlog{2}(:,3)/avg_exp,simple_vector, CRMlog{3}(:,3)/avg_exp,'LineWidth',2)
+plot(simple_vector, CRMlog{1}(:,3)/avg_expLOG(1),simple_vector, CRMlog{2}(:,3)/avg_expLOG(2),'--',simple_vector, CRMlog{3}(:,3)/avg_expLOG(3),':','LineWidth',2)
 xlabel('Rank','fontsize',18);
 ylabel('Expression Level / Mean','fontsize',18);
 title('Comparison of Rank Order Profiles','fontsize',18)
@@ -411,7 +419,7 @@ text(3000,1,inset1c)
 
 %legend('C', 'A', 'B', 'A and B', 'hA and hB')
 figure(2);
-plot(simple_vector, CRMlog{4}(:,3)/avg_exp,simple_vector, CRMlog{5}(:,3)/avg_exp,'LineWidth',2)
+plot(simple_vector, CRMlog{4}(:,3)/avg_expLOG(4),simple_vector, CRMlog{5}(:,3)/avg_expLOG(5),'--','LineWidth',2)
 xlabel('Rank','fontsize',18);
 ylabel('Average Expression Level','fontsize',18);
 title('Comparison of Rank Order Profiles','fontsize',18)
@@ -421,7 +429,7 @@ inset2 = sprintf('The distance between curves is %3.3f',DistanceA_BC);
 text(3000,3,inset2)
 
 figure(3);
-plot(simple_vector, CRMlog{6}(:,3)/avg_exp,simple_vector, CRMlog{7}(:,3)/avg_exp,'LineWidth',2)
+plot(simple_vector, CRMlog{6}(:,3)/avg_expLOG(6),simple_vector, CRMlog{7}(:,3)/avg_expLOG(7),'--','LineWidth',2)
 xlabel('Rank','fontsize',18);
 ylabel('Average Expression Level','fontsize',18);
 title('Comparison of Rank Order Profiles','fontsize',18)
