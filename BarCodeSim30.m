@@ -416,9 +416,9 @@ legend('C', 'A', 'B')
 DistanceC_A=rop_metric(CRMlog{1},CRMlog{2});
 DistanceA_B=rop_metric(CRMlog{2},CRMlog{3});
 DistanceC_B=rop_metric(CRMlog{1},CRMlog{3});
-inset1a = sprintf('The distance between C and A is %3.3f',DistanceC_A);
-inset1b = sprintf('The distance between A and B is %3.3f',DistanceA_B);
-inset1c = sprintf('The distance between C and B is %3.3f',DistanceC_B);
+inset1a = sprintf('D(A,C) = %3.3f',DistanceC_A);
+inset1b = sprintf('D(A,B) = %3.3f',DistanceA_B);
+inset1c = sprintf('D(B,C) = %3.3f',DistanceC_B);
 text(3000,3,inset1a)
 text(3000,2,inset1b)
 text(3000,1,inset1c)
@@ -427,30 +427,30 @@ text(3000,1,inset1c)
 figure(2);
 plot(simple_vector, CRMlog{4}(:,3)/avg_expLOG(4),simple_vector, CRMlog{5}(:,3)/avg_expLOG(5),'--','LineWidth',2)
 xlabel('Rank','fontsize',18);
-ylabel('Average Expression Level','fontsize',18);
+ylabel('Expression Level / Mean','fontsize',18);
 title('Comparison of Rank Order Profiles','fontsize',18)
 legend('A', 'B and C')
 DistanceA_BC=rop_metric(CRMlog{4},CRMlog{5});
-inset2 = sprintf('The distance between curves is %3.3f',DistanceA_BC);
+inset2 = sprintf('D = %3.3f',DistanceA_BC);
 text(3000,3,inset2)
 
 figure(3);
 plot(simple_vector, CRMlog{6}(:,3)/avg_expLOG(6),simple_vector, CRMlog{7}(:,3)/avg_expLOG(7),'--','LineWidth',2)
 xlabel('Rank','fontsize',18);
-ylabel('Average Expression Level','fontsize',18);
+ylabel('Expression Level / Mean','fontsize',18);
 title('Comparison of Rank Order Profiles','fontsize',18)
 legend('A and C', 'half A and half B and C')
 DistanceAC_hAhBC=rop_metric(CRMlog{6},CRMlog{7});
-inset3 = sprintf('The distance between curves is %3.3f',DistanceAC_hAhBC);
+inset3 = sprintf('D = %3.3f',DistanceAC_hAhBC);
 text(3000,3,inset3)
 
 figure(4);
 plot(simple_vector, CRMlog{8}(:,3)/avg_expLOG(8),simple_vector, CRMlog{9}(:,3)/avg_expLOG(9),'--','LineWidth',2)
 xlabel('Rank','fontsize',18);
-ylabel('Average Expression Level','fontsize',18);
+ylabel('Expression Level / Mean','fontsize',18);
 title('Comparison of Rank Order Profiles','fontsize',18)
 legend('A and C', 'C and D')%%%%%compare (C+A) vs. (C+D)
 DistanceAC_CD=rop_metric(CRMlog{8},CRMlog{9});
-inset4 = sprintf('The distance between curves is %3.3f',DistanceAC_CD);
+inset4 = sprintf('D = %3.3f',DistanceAC_CD);
 text(3000,3,inset4)
 toc
