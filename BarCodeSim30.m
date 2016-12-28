@@ -21,7 +21,7 @@ clear  %Total_Targets is a cell array with all targets to be compared
 %the simulation loops through this cell array
 
 %figure 1
-Total_Targets{1} = 50;%compare (C) with (A) with (B)
+Total_Targets{1} = 50;%compare (C) with (A) with (B) 
 Total_Targets{2} = 51;
 Total_Targets{3} = 52;
 
@@ -33,6 +33,12 @@ Total_Targets{5} = [50,52];
 Total_Targets{6} = [50,51];%compare (A,C) with (half A, half B, C)
 Total_Targets{7} = [50,51,52];
 %Total_Targets{5} = [51,52];
+
+%figure 4  D = C{47}, C{48}, and C{49}
+Total_Targets{8} = [50,51];%compare (C+A) vs. (C+D)
+Total_Targets{9} = [47,48,49,50];
+
+
 global Number_of_Iterations
 %%
 for a = 1:size(Total_Targets,2)
@@ -351,8 +357,8 @@ D_raw = flip(B_raw,1);    %puts into descending order WRT col 3
 D_raw(end,:) = [];     %removes the last row from array, initial zeros for A.
 CRM_raw = D_raw;
 %from (eq2)
-%avg_exp = sum(CRM_raw(:,3))/Number_of_Iterations; instinctual calculation
-avg_exp = sum(CRM_raw(:,1))/sum(CRM_raw(:,2)); %paper calculation eq. (2)
+avg_exp = sum(CRM_raw(:,3))/Number_of_Iterations; %instinctual calculation
+%avg_exp = sum(CRM_raw(:,1))/sum(CRM_raw(:,2)); %paper calculation eq. (2)
 
 
 B_plot = sortrows(A_plot,3); %orders array with respect to(WRT) col 3
@@ -437,4 +443,14 @@ legend('A and C', 'half A and half B and C')
 DistanceAC_hAhBC=rop_metric(CRMlog{6},CRMlog{7});
 inset3 = sprintf('The distance between curves is %3.3f',DistanceAC_hAhBC);
 text(3000,3,inset3)
+
+figure(4);
+plot(simple_vector, CRMlog{8}(:,3)/avg_expLOG(8),simple_vector, CRMlog{9}(:,3)/avg_expLOG(9),'--','LineWidth',2)
+xlabel('Rank','fontsize',18);
+ylabel('Average Expression Level','fontsize',18);
+title('Comparison of Rank Order Profiles','fontsize',18)
+legend('A and C', 'C and D')%%%%%compare (C+A) vs. (C+D)
+DistanceAC_CD=rop_metric(CRMlog{8},CRMlog{9});
+inset4 = sprintf('The distance between curves is %3.3f',DistanceAC_CD);
+text(3000,3,inset4)
 toc
