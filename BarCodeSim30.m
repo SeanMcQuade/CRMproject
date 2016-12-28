@@ -442,7 +442,7 @@ title('Comparison of Rank Order Profiles','fontsize',18)
 legend('A and C', 'half A and half B and C')
 DistanceAC_hAhBC=rop_metric(CRMlog{6},CRMlog{7});
 inset3 = sprintf('D = %3.3f',DistanceAC_hAhBC);
-text(7000,6,inset3)
+text(7000,5,inset3)
 
 figure(4);
 plot(simple_vector, CRMlog{8}(:,3)/avg_expLOG(8),simple_vector, CRMlog{9}(:,3)/avg_expLOG(9),'--','LineWidth',2)
@@ -452,5 +452,5 @@ title('Comparison of Rank Order Profiles','fontsize',18)
 legend('A and C', 'C and D')%%%%%compare (C+A) vs. (C+D)
 DistanceAC_CD=rop_metric(CRMlog{8},CRMlog{9});
 inset4 = sprintf('D = %3.3f',DistanceAC_CD);
-text(7500,6,inset4)
+text(7500,5,inset4)
 toc
