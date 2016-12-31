@@ -1,7 +1,7 @@
 %{
 BarCode sim for Dr. Jongmin Nam
-Sean McQuade and Jongmin Nam 1.08.2015 to 5.26.2015
-using Sea Urchin Lineage from "Development of Sea Urchins, Ascidians, and
+Sean McQuade and Jongmin Nam, Jan 2015 to Dec 2016
+using Sea Urchin Lineage chart from "Development of Sea Urchins, Ascidians, and
 other invertebrate Deuterostomes: Experimental Approaches"
 
 Authors: Charles A. Ettensohn, Gary M. Wessel, Gregory A. Wray
@@ -9,7 +9,7 @@ Authors: Charles A. Ettensohn, Gary M. Wessel, Gregory A. Wray
 Elsevier academic press
 
  
-% i=cellgroup integraged; 
+% i=cellgroup integrated; 
 % j=cell in group; 
 % int = number of integrated cells
 % exp = number of expressed cells
